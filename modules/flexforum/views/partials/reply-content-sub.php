@@ -1,3 +1,7 @@
+<?php 
+
+?>
+
 <div class="row <?php echo "replies-$reply[type]-$reply[type_id]" ?>">
     <div class="col-xs-12">
         <hr>

@@ -17,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 * environments.
 *
 */
-define('APP_BASE_URL', 'https://egate.copier.ph/');
+define('APP_BASE_URL', 'http://localhost/egate_copier/');
 
 /*
 * --------------------------------------------------------------------------
@@ -43,12 +43,12 @@ define('APP_DB_HOSTNAME', 'localhost');
 /**
  * The username used to connect to the database
  */
-define('APP_DB_USERNAME', 'print_egate_copier_erp');
+define('APP_DB_USERNAME', 'root');
 
 /**
  * The password used to connect to the database
  */
-define('APP_DB_PASSWORD', 'n~Od]3KQhM7z');
+define('APP_DB_PASSWORD', '');
 
 /**
  * The name of the database you want to connect to

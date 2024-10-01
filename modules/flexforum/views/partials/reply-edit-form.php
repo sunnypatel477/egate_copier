@@ -6,8 +6,8 @@
     </div>
     <div class="col-md-12">
         <?php 
-        // $text_value = isset($reply['reply']) ? $reply['reply'] : '';
-        $text_value =  '';
+        $text_value = isset($reply['reply']) ? $reply['reply'] : '';
+        // $text_value =  '';
         ?>
         <?php echo render_textarea('reply', flexforum_lang('reply', '', false), $text_value, ['placeholder' => flexforum_lang('reply_placeholder')], [], '', is_admin() ? 'flexforum-reply-admin' : 'flexforum-reply-client'); ?>
     </div>

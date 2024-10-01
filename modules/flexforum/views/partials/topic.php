@@ -1,3 +1,6 @@
+<?php 
+use Carbon\Carbon;
+?>
 <div class="row">
     <div class="col-md-12">
         <div id="flexforum-topic" class="panel_s">
@@ -89,8 +92,25 @@
 
                 <?php $like_type = FLEXFORUM_REPLY_LIKE_TYPE ?>
                 <?php $follower_type = FLEXFORUM_REPLY_FOLLOWER_TYPE ?>
-                <?php foreach ($replies as $reply) { ?>
-                    <?php $this->load->view('partials/reply-content', ['reply' => $reply, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true, 'closed' => $topic['closed']]) ?>
+                <?php foreach ($replies as $reply) { 
+                    ?>
+                    <?php $this->load->view('partials/reply-content', ['reply' => $reply, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true,'is_secondary_reply'=>false, 'closed' => $topic['closed']]) ?>
+                    <?php 
+                        if(isset($reply['repaly'])){ ?>
+                        <?php foreach ($reply['repaly'] as $r) { 
+
+                            $r['poster_name'] = flexforum_get_user_name($r['user_id'], $r['user_type']);
+                            $r['poster_image'] = flexforum_get_poster_image($r['user_id'], $r['user_type']);
+                            $r['last_modified'] = Carbon::parse(_dt($r['date_updated']))->diffForHumans();
+                            $r['reply_liked'] = flexforum_get_reply_liked($r['id']);
+                            $r['reply_followed'] = flexforum_get_reply_followed($r['id']);
+                            $r['is_reply_owner'] = (flexforum_get_user_id() === $r['user_id'] && flexforum_get_user_type() == $r['user_type']);
+                    ?>
+                        <?php $this->load->view('partials/reply-content-sub', ['reply' => $r, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true,'is_secondary_reply'=>true, 'closed' => $topic['closed']]) ?>
+
+                        <?php } ?>
+                        <?php }
+                    ?>
                 <?php } ?>
             </div>
         </div>
@@ -393,30 +413,35 @@
         $(this).children().toggleClass('fa-angle-up');
         let type_id = $(this).data('id');
         let closed = $(this).data('closed');
-
+        
         let secondary_reples = $(`.replies-reply-${type_id}`);
-
-        if (secondary_reples.length > 0) {
-            secondary_reples.remove();
+        
+        if ($(`.replies-reply-${type_id}`).hasClass('hide')) {
+            $(`.replies-reply-${type_id}`).removeClass('hide');
         } else {
-            let type = "<?php echo FLEXFORUM_REPLY_REPLY_TYPE ?>";
-            let data = {
-                type_id: type_id,
-                type: type,
-                closed: closed
-            }
-
-            $.getJSON(getRepliesBaseURL(), data,
-                function(data, textStatus, jqXHR) {
-                    if (data.success) {
-                        let form_id = "flexforum_secondary_reply_form-" + type_id;
-                        $(`#${form_id}`).after(data.data)
-                    } else {
-                        alert_float('danger', data.message)
-                    }
-                }
-            );
+            $(`.replies-reply-${type_id}`).addClass('hide');
         }
+        // if (secondary_reples.length > 0) {
+        //     secondary_reples.remove();
+        // } else {
+        //     let type = "<?php echo FLEXFORUM_REPLY_REPLY_TYPE ?>";
+        //     let data = {
+        //         type_id: type_id,
+        //         type: type,
+        //         closed: closed
+        //     }
+
+        //     $.getJSON(getRepliesBaseURL(), data,
+        //         function(data, textStatus, jqXHR) {
+        //             if (data.success) {
+        //                 let form_id = "flexforum_secondary_reply_form-" + type_id;
+        //                 $(`#${form_id}`).after(data.data)
+        //             } else {
+        //                 alert_float('danger', data.message)
+        //             }
+        //         }
+        //     );
+        // }
     }
 
     function resetReplyForm(secondary = false) {
@@ -435,6 +460,7 @@
         $(`#${form_id} #additional`).html('');
         $(`#${form_id} input`).not('[type="hidden"]').val('');
         $(`#${form_id} textarea`).not('[type="hidden"]').val('');
+        $(`#${form_id} textarea`).val('');
         tinymce.activeEditor.setContent('');
     }
 
@@ -477,14 +503,17 @@
             success: function(response) {
                 let replyData = (typeof response === "string") ? JSON.parse(response) : response;
 
+                $(`#${form_id} textarea[name="reply"]`).val(replyData.reply);
 
+                // $('#flexforum_topic_modal textarea[name="description"]').val(data.data.description);
                 if (tinymce && tinymce.activeEditor) {
+                    
                     tinyMCE.activeEditor.setContent(replyData.reply);
                 } 
+                
+                // let plainTextReply = $('<div>').html(replyData.reply).text();
 
-                let plainTextReply = $('<div>').html(replyData.reply).text();
-
-                $(`#${form_id} textarea[name="reply"]`).val(plainTextReply);
+                // $(`#${form_id} textarea[name="reply"]`).val(plainTextReply);
 
                 // $(`#${form_id} textarea[name="reply"]`).val(replyData.reply);
 

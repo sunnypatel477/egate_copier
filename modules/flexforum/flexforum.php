@@ -747,8 +747,34 @@ function flexforum_get_replies_with_relations($conditions = [], $sortings = [])
 {
     $CI = &get_instance();
     $CI->load->model('flexforum/flexforumreply_model');
-
-    return $CI->flexforumreply_model->query_all($conditions, $sortings);
+    $final_array = [];
+    $topics =  $CI->flexforumreply_model->query_all($conditions, $sortings);
+    
+    
+    foreach($topics as $b){
+        $conditions = [
+            'type' => 'reply',
+            'type_id' => $b['id']
+        ]; 
+        $sortings=  [
+            [
+                'field' => 'date_added',
+                'order' => 'desc'
+            ]
+            ];
+            $replies =  $CI->flexforumreply_model->query_all($conditions, $sortings);
+            $temp = $b;
+            if(!empty($replies)){
+                // $topics = array_merge($topics, $replies);
+                $temp['repaly'] = $replies;
+            }
+            
+            $final_array[] = $temp;   
+            
+    }
+    
+    return $final_array;
+    
 }
 
 function flexforum_enrich_reply($reply)

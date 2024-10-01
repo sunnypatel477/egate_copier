@@ -272,6 +272,7 @@
 
 
     function flexforum_topic_description_tinymce() {
+        alert('1')
         init_editor(".flexforum-topic-description-client", flexforum_editor_config());
         init_editor(".flexforum-topic-description-admin");
     }
