@@ -1,0 +1,2 @@
+V1.0.1 - 24_07_2024
+Customer service: updates work independently of the Service + Warranty module

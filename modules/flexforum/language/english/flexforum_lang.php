@@ -1,0 +1,126 @@
+<?php
+# Version 1.0.0
+$prefix = 'flexforum';
+$lang[$prefix] = 'Technical Forum';
+$lang[$prefix.'_community_forum'] = 'Technical Forum';
+$lang[$prefix.'_search'] = 'Search';
+$lang[$prefix.'_search_placeholder'] = 'Ask questions, discuss best practices, and get answers from experts. Discover what\'s new in the community!';
+$lang[$prefix . '_categories'] = 'Categories';
+$lang[$prefix . '_topic_categories'] = 'Topic Categories';
+$lang[$prefix . '_category'] = 'Category';
+$lang[$prefix . '_edit_category'] = 'Edit Category';
+$lang[$prefix . '_new_category'] = 'New Category';
+$lang[$prefix . '_edit_topic'] = 'Edit Topic';
+$lang[$prefix . '_new_topic'] = 'New Topic';
+$lang[$prefix . '_select_category'] = 'Select Category';
+$lang[$prefix . '_close'] = 'Close';
+$lang[$prefix . '_name'] = 'Name';
+$lang[$prefix . '_new_category'] = 'New Category';
+$lang[$prefix . '_submit'] = 'Submit';
+$lang[$prefix . '_modal_list_added_successfully'] = 'Modal list added successfully';
+$lang[$prefix . '_modal_list_updated_successfully'] = 'Modal list updated successfully';
+$lang[$prefix . '_category_updated_successfully'] = 'Category updated successfully';
+$lang[$prefix . '_category_added_successfully'] = 'Category added successfully';
+$lang[$prefix . '_model_list_deleted_successfully'] = 'Model list deleted successfully';
+$lang[$prefix . '_category_deleted_successfully'] = 'Category deleted successfully';
+$lang[$prefix . '_category_deletion_failed'] = 'Category deletion failed';
+$lang[$prefix . '_slug'] = 'Slug';
+$lang[$prefix . '_options'] = 'Options';
+$lang[$prefix . '_no_categories_found'] = 'No Categories Found';
+$lang[$prefix . '_title'] = 'Title';
+$lang[$prefix . '_title_placeholder'] = 'What is this discussion about in one brief sentence?';
+$lang[$prefix . '_description'] = 'Description';
+$lang[$prefix . '_description_placeholder'] = 'Expand on the title in detail.';
+$lang[$prefix . '_topic_updated_successfully'] = 'Topic updated successfully';
+$lang[$prefix . '_topic_update_failed'] = 'Topic update failed';
+$lang[$prefix . '_topic_added_successfully'] = 'Topic added successfully';
+$lang[$prefix . '_topic_addition_failed'] = 'Topic addition failed';
+$lang[$prefix . '_filter_by_category'] = 'Filter by Category';
+$lang[$prefix . '_topics'] = 'Topics';
+$lang[$prefix . '_topic'] = 'Topic';
+$lang[$prefix . '_topic'] = 'Topic';
+$lang[$prefix . '_replies'] = 'Replies';
+$lang[$prefix . '_views'] = 'Views';
+$lang[$prefix . '_activity'] = 'Activity';
+$lang[$prefix . '_topic_title_required'] = 'Topic title is required';
+$lang[$prefix . '_topic_category_required'] = 'Topic Parent category is required';
+$lang[$prefix . 'topic_childcategory_required'] = 'Topic Child category is required';
+$lang[$prefix . '_topic_description_required'] = 'Topic description is required';
+$lang[$prefix . '_topic_deleted_successfully'] = 'Topic deleted successfully';
+$lang[$prefix . '_topic_deletion_failed'] = 'Topic deletion failed';
+$lang[$prefix . '_topic_not_found'] = 'Topic not found';
+$lang[$prefix . '_topic_found'] = 'Topic found';
+$lang[$prefix . '_like'] = 'Like';
+$lang[$prefix . '_reply'] = 'Reply';
+$lang[$prefix . '_views'] = 'Views';
+$lang[$prefix . '_likes'] = 'Likes';
+$lang[$prefix . '_replies'] = 'Replies';
+$lang[$prefix . '_topic_liked_failed'] = 'Liking topic failed';
+$lang[$prefix . '_topic_liked'] = 'Topic liked';
+$lang[$prefix . '_reply_liked'] = 'Reply liked';
+$lang[$prefix . '_topic_unliked'] = 'Topic unliked';
+$lang[$prefix . '_reply_unliked'] = 'Reply unliked';
+$lang[$prefix . '_edit_reply'] = 'Edit Reply';
+$lang[$prefix . '_new_reply'] = 'New Reply';
+$lang[$prefix . '_reply_placeholder'] = 'Type Your Reply';
+$lang[$prefix . '_reply_required'] = 'Reply required';
+$lang[$prefix . '_reply_updated_successfully'] = 'Reply updated successfully';
+$lang[$prefix . '_reply_update_failed'] = 'Reply update failed';
+$lang[$prefix . '_reply_deleted_successfully'] = 'Reply deleted successfully';
+$lang[$prefix . '_reply_deletion_failed'] = 'Reply deletion failed';
+$lang[$prefix . '_reply_not_found'] = 'Reply not found';
+$lang[$prefix . '_reply_found'] = 'Reply found';
+$lang[$prefix . '_reply_added_successfully'] = 'Reply added successfully';
+$lang[$prefix . '_reply_addition_failed'] = 'Reply addition failed';
+$lang[$prefix . '_replies_found'] = 'Replies found';
+$lang[$prefix . '_replies_not_found'] = 'Replies not found';
+$lang[$prefix . '_show_replies'] = 'Show Replies';
+$lang[$prefix . '_missing_query_parameters'] = 'Missing query parameters';
+$lang[$prefix . '_bans'] = 'Bans';
+$lang[$prefix . '_banned_users'] = 'Banned users';
+$lang[$prefix . '_ban_user'] = 'Ban user';
+$lang[$prefix . '_new_ban'] = 'Choose a User you would like to Ban from accessing the forum';
+$lang[$prefix . '_user'] = 'User';
+$lang[$prefix . '_user_banned'] = 'User Banned';
+$lang[$prefix . '_banned_message'] = "You have have been banned! Contact the admin for more info.";
+$lang[$prefix . '_user_ban_lifted'] = 'User Ban Lifted';
+$lang[$prefix . '_close_topic'] = 'Close Topic?';
+$lang[$prefix . '_followers'] = 'Follower';
+$lang[$prefix . '_follow'] = 'Follow';
+$lang[$prefix . '_following_topic_failed'] = 'Following Topic Failed';
+$lang[$prefix . '_topic_followed'] = 'Topic followed';
+$lang[$prefix . '_reply_followed'] = 'Reply followed';
+$lang[$prefix . '_topic_unfollowed'] = 'Topic unfollowed';
+$lang[$prefix . '_reply_unfollowed'] = 'Reply unfollowed';
+$lang[$prefix . '_missing_name'] = 'Missing name';
+$lang[$prefix . '_missing_email'] = 'Missing email';
+$lang[$prefix . '_missing_link'] = 'Missing link';
+$lang[$prefix . '_settings_updated'] = 'Settings updated';
+$lang[$prefix . '_settings'] = 'Settings';
+$lang[$prefix . '_send_email_notification'] = 'Send email notification?';
+$lang[$prefix . '_delete_reply'] = 'Delete reply';
+$lang[$prefix . '_edit_replay'] = 'Edit reply';
+$lang[$prefix . '_topic_file'] = 'File';
+$lang[$prefix . '_replay_file'] = 'File';
+$lang[$prefix . '_parent_categories'] = '1st Category';
+$lang[$prefix . '_child_categories'] = '2nd Category';
+$lang[$prefix . '_l_f_r'] = 'L,F,R';
+$lang[$prefix . '_model_list'] = 'Model List';
+$lang[$prefix . '_model_name'] = 'Model Code';
+$lang[$prefix . '_new_model_list'] = 'New Model';
+$lang[$prefix . '_edit_model_list'] = 'Edit Model';
+$lang[$prefix . '_brand'] = 'Brand';
+$lang[$prefix . '_code'] = 'Model Name';
+$lang[$prefix . '_new_modal_list'] = 'New Modal';
+$lang[$prefix . '_brand_name'] = 'Brand';
+$lang[$prefix . '_error_code'] = 'Error Code';
+$lang['community_forum'] = 'Technical Forum';
+
+
+
+
+
+
+
+
+

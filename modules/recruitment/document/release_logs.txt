@@ -1,0 +1,5 @@
+20_03_2024: V1.2.3
+- Add email Template using: New candidate have applied.
+- Send Email notify when New candidate have applied.
+26_03_2024:
+-Recuitment Channel: Allows creating a recruitment form from the Custom Field list created for Candidate

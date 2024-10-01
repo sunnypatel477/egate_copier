@@ -1,0 +1,556 @@
+<?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
+<?php init_head(); ?>
+<style>
+    table tr td:nth-child(1) {
+        text-align: left;
+    }
+    .lead-count {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        text-align: center;
+        border-radius: 50%;
+        color: white;
+        background-color: palevioletred;
+        font-size: 10px;
+    }
+    .lead-count-note {
+       display: inline-block;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        text-align: center;
+        border-radius: 50%;
+        color: white;
+        background-color: #2563EB;
+        font-size: 10px;
+    }
+</style>
+<div id="wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="_buttons tw-mb-2 sm:tw-mb-4">
+                    <a href="#" onclick="init_lead(); return false;" class="btn btn-primary mright5 pull-left display-block">
+                        <i class="fa-regular fa-plus tw-mr-1"></i>
+                        <?php echo _l('new_lead'); ?>
+                    </a>
+                    <?php if (is_admin() || get_option('allow_non_admin_members_to_import_leads') == '1') { ?>
+                        <a href="<?php echo admin_url('client_lead/leads/import'); ?>" class="btn btn-primary pull-left display-block hidden-xs">
+                            <i class="fa-solid fa-upload tw-mr-1"></i>
+                            <?php echo _l('import_leads'); ?>
+                        </a>
+                    <?php } ?>
+                    <div class="row">
+                        <div class="col-sm-5 ">
+                            <a href="#" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" data-title="<?php echo _l('leads_summary'); ?>" data-placement="top" onclick="slideToggle('.leads-overview'); return false;"><i class="fa fa-bar-chart"></i></a>
+                            <a href="<?php echo admin_url('client_lead/leads/switch_kanban/' . $switch_kanban); ?>" class="btn btn-default mleft5 hidden-xs" data-toggle="tooltip" data-placement="top" data-title="<?php echo $switch_kanban == 1 ? _l('leads_switch_to_kanban') : _l('switch_to_list_view'); ?>">
+                                <?php if ($switch_kanban == 1) { ?>
+                                    <i class="fa-solid fa-grip-vertical"></i>
+                                <?php } else { ?>
+                                    <i class="fa-solid fa-table-list"></i>
+                                <?php }; ?>
+                            </a>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 pull-right leads-search">
+                            <?php if ($this->session->userdata('leads_kanban_view') == 'true') { ?>
+                                <div data-toggle="tooltip" data-placement="top" data-title="<?php echo _l('search_by_tags'); ?>">
+                                    <?php echo render_input('search', '', '', 'search', ['data-name' => 'search', 'onkeyup' => 'leads_kanban();', 'placeholder' => _l('leads_search')], [], 'no-margin') ?>
+                                </div>
+                            <?php } ?>
+                            <?php echo form_hidden('sort_type'); ?>
+                            <?php echo form_hidden('sort', (get_option('default_leads_kanban_sort') != '' ? get_option('default_leads_kanban_sort_type') : '')); ?>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="hide leads-overview tw-mt-2 sm:tw-mt-4 tw-mb-4 sm:tw-mb-0">
+                        <h4 class="tw-mt-0 tw-font-semibold tw-text-lg">
+                            <?php echo _l('leads_summary'); ?>
+                        </h4>
+                        <div class="tw-flex tw-flex-wrap tw-flex-col lg:tw-flex-row tw-w-full tw-gap-3 lg:tw-gap-6">
+                            <?php
+                            foreach ($summary as $status) { ?>
+                                <div class="lg:tw-border-r lg:tw-border-solid lg:tw-border-neutral-300 tw-flex-1 tw-flex tw-items-center last:tw-border-r-0">
+                                    <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
+                                        <?php
+                                        if (isset($status['percent'])) {
+                                            echo '<span data-toggle="tooltip" data-title="' . $status['total'] . '">' . $status['percent'] . '%</span>';
+                                        } else {
+                                            // Is regular status
+                                            echo $status['total'];
+                                        }
+                                        ?>
+                                    </span>
+                                    <span style="color:<?php echo $status['color']; ?>" class="<?php echo isset($status['junk']) || isset($status['lost']) ? 'text-danger' : ''; ?>">
+                                        <?php echo $status['name']; ?>
+                                    </span>
+                                </div>
+                            <?php } ?>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="<?php echo $isKanBan ? '' : 'panel_s'; ?>">
+                    <div class="<?php echo $isKanBan ? '' : 'panel-body'; ?>">
+                        <div class="tab-content">
+                            <?php
+                            if ($isKanBan) { ?>
+                                <div class="active kan-ban-tab" id="kan-ban-tab" style="overflow:auto;">
+                                    <div class="kanban-leads-sort">
+                                        <span class="bold"><?php echo _l('leads_sort_by'); ?>: </span>
+                                        <a href="#" onclick="leads_kanban_sort('dateadded'); return false" class="dateadded">
+                                            <?php if (get_option('default_leads_kanban_sort') == 'dateadded') {
+                                                echo '<i class="kanban-sort-icon fa fa-sort-amount-' . strtolower(get_option('default_leads_kanban_sort_type')) . '"></i> ';
+                                            } ?><?php echo _l('leads_sort_by_datecreated'); ?>
+                                        </a>
+                                        |
+                                        <a href="#" onclick="leads_kanban_sort('leadorder');return false;" class="leadorder">
+                                            <?php if (get_option('default_leads_kanban_sort') == 'leadorder') {
+                                                echo '<i class="kanban-sort-icon fa fa-sort-amount-' . strtolower(get_option('default_leads_kanban_sort_type')) . '"></i> ';
+                                            } ?><?php echo _l('leads_sort_by_kanban_order'); ?>
+                                        </a>
+                                        |
+                                        <a href="#" onclick="leads_kanban_sort('lastcontact');return false;" class="lastcontact">
+                                            <?php if (get_option('default_leads_kanban_sort') == 'lastcontact') {
+                                                echo '<i class="kanban-sort-icon fa fa-sort-amount-' . strtolower(get_option('default_leads_kanban_sort_type')) . '"></i> ';
+                                            } ?><?php echo _l('leads_sort_by_lastcontact'); ?>
+                                        </a>
+                                    </div>
+                                    <div class="row">
+                                        <div class="container-fluid leads-kan-ban">
+                                            <div id="kan-ban"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="row" id="leads-table">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-sm-1 pull-right leads-filter-column">
+                                                <?php if ($this->session->userdata('leads_kanban_view') == 'true') { ?>
+                                                    <div data-toggle="tooltip" data-placement="top" data-title="<?php echo _l('search_by_tags'); ?>">
+                                                        <?php echo render_input('search', '', '', 'search', ['data-name' => 'search', 'onkeyup' => 'leads_kanban();', 'placeholder' => _l('leads_search')], [], 'no-margin') ?>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div id="vueApp" class="tw-inline pull-right">
+                                                        <app-filters id="<?php echo $table->id(); ?>" view="<?php echo $table->viewName(); ?>" :rules="<?php echo app\services\utilities\Js::from($this->input->get('status') ? $table->findRule('status')->setValue([$this->input->get('status')]) : []); ?>" :saved-filters="<?php echo $table->filtersJs(); ?>" :available-rules="<?php echo $table->rulesJs(); ?>">
+                                                        </app-filters>
+                                                    </div>
+                                                <?php } ?>
+                                                <?php echo form_hidden('sort_type'); ?>
+                                                <?php echo form_hidden('sort', (get_option('default_leads_kanban_sort') != '' ? get_option('default_leads_kanban_sort_type') : '')); ?>
+                                            </div>
+                                        </div>
+                                        <hr class="hr-panel-separator" />
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-md-12">
+                                        <a href="#" data-toggle="modal" data-table=".table-client-leads" data-target="#leads_bulk_actions" class="hide bulk-actions-btn table-btn"><?php echo _l('bulk_actions'); ?></a>
+                                        <div class="modal fade bulk_actions" id="leads_bulk_actions" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title"><?php echo _l('bulk_actions'); ?></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php if (has_permission('leads', '', 'delete')) { ?>
+                                                            <div class="checkbox checkbox-danger">
+                                                                <input type="checkbox" name="mass_delete" id="mass_delete">
+                                                                <label for="mass_delete"><?php echo _l('mass_delete'); ?></label>
+                                                            </div>
+                                                            <hr class="mass_delete_separator" />
+                                                        <?php } ?>
+                                                        <div id="bulk_change">
+                                                            <div class="form-group">
+                                                                <div class="checkbox checkbox-primary checkbox-inline">
+                                                                    <input type="checkbox" name="leads_bulk_mark_lost" id="leads_bulk_mark_lost" value="1">
+                                                                    <label for="leads_bulk_mark_lost">
+                                                                        <?php echo _l('lead_mark_as_lost'); ?>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <?php echo render_select('move_to_status_leads_bulk', $statuses, ['id', 'name'], 'ticket_single_change_status'); ?>
+                                                            <?php
+                                                            echo render_select('move_to_source_leads_bulk', $sources, ['id', 'name'], 'lead_source');
+                                                            echo render_datetime_input('leads_bulk_last_contact', 'leads_dt_last_contact');
+                                                            echo render_select('assign_to_leads_bulk', $staff, ['staffid', ['firstname', 'lastname']], 'leads_dt_assigned');
+                                                            ?>
+                                                            <div class="form-group">
+                                                                <?php echo '<p><b><i class="fa fa-tag" aria-hidden="true"></i> ' . _l('tags') . ':</b></p>'; ?>
+                                                                <input type="text" class="tagsinput" id="tags_bulk" name="tags_bulk" value="" data-role="tagsinput">
+                                                            </div>
+                                                            <hr />
+                                                            <div class="form-group no-mbot">
+                                                                <div class="radio radio-primary radio-inline">
+                                                                    <input type="radio" name="leads_bulk_visibility" id="leads_bulk_public" value="public">
+                                                                    <label for="leads_bulk_public">
+                                                                        <?php echo _l('lead_public'); ?>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="radio radio-primary radio-inline">
+                                                                    <input type="radio" name="leads_bulk_visibility" id="leads_bulk_private" value="private">
+                                                                    <label for="leads_bulk_private">
+                                                                        <?php echo _l('private'); ?>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
+                                                        <a href="#" class="btn btn-primary" onclick="leads_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
+                                        <?php
+
+                                        $table_data  = [];
+                                        $_table_data = [
+                                            '<span class="hide"> - </span><div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="client-leads"><label></label></div>',
+                                            [
+                                                'name'     => _l('the_number_sign'),
+                                                'th_attrs' => ['class' => 'toggleable', 'id' => 'th-number'],
+                                            ],
+                                            [
+                                                'name'     => _l('leads_dt_name'),
+                                                'th_attrs' => ['class' => 'toggleable', 'id' => 'th-name'],
+                                            ],
+                                        ];
+                                        if (is_gdpr() && get_option('gdpr_enable_consent_for_leads') == '1') {
+                                            $_table_data[] = [
+                                                'name'     => _l('gdpr_consent') . ' (' . _l('gdpr_short') . ')',
+                                                'th_attrs' => ['id' => 'th-consent', 'class' => 'not-export'],
+                                            ];
+                                        }
+                                        $_table_data[] = [
+                                            'name'     => _l('lead_company'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-company'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('lead_inquiry_about'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-inquiry_about'],
+                                        ];
+                                       
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_last_note'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-lleads_dt_last_note'],
+                                        ];
+                                         $_table_data[] = [
+                                            'name'     => _l('leads_dt_last_note_activity'),
+                                            'th_attrs' => ['class' => 'not_visible', 'id' => 'th-leads_dt_last_note_activity'],
+                                        ];
+                                         $_table_data[] = [
+                                            'name'     => _l('leads_dt_last_contact'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-last-contact'],
+                                        ];
+                                         $_table_data[] = [
+                                            'name'     => _l('leads_dt_last_description_activity'),
+                                            'th_attrs' => ['class' => 'not_visible', 'id' => 'th-leads_dt_last_description_activity'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_email'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-email'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_phonenumber'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-phone'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_lead_value'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-lead-value'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('tags'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-tags'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_assigned'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-assigned'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_status'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-status'],
+                                        ];
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_source'),
+                                            'th_attrs' => ['class' => 'toggleable', 'id' => 'th-source'],
+                                        ];
+                                        
+                                        $_table_data[] = [
+                                            'name'     => _l('leads_dt_datecreated'),
+                                            'th_attrs' => ['class' => 'date-created toggleable', 'id' => 'th-date-created'],
+                                        ];
+                                        foreach ($_table_data as $_t) {
+                                            array_push($table_data, $_t);
+                                        }
+                                        $custom_fields = get_custom_fields('leads', ['show_on_table' => 1]);
+                                        foreach ($custom_fields as $field) {
+                                            array_push($table_data, [
+                                                'name'     => $field['name'],
+                                                'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
+                                            ]);
+                                        }
+                                        $table_data = hooks()->apply_filters('leads_table_columns', $table_data);
+                                        ?>
+                                        <div class="panel-table-full">
+                                            <?php
+                                            render_datatable(
+                                                $table_data,
+                                                'client-leads',
+                                                ['customizable-table number-index-2'],
+                                                [
+                                                    'id'                         => 'table-client-leads',
+                                                    'data-last-order-identifier' => 'client-leads',
+                                                    'data-default-order'         => get_table_last_order('client-leads'),
+                                                ]
+                                            );
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-12 pull-right leads-search">
+                                    <?php if ($this->session->userdata('leads_kanban_view') == 'true') { ?>
+                                        <div data-toggle="tooltip" data-placement="top" data-title="<?php echo _l('search_by_tags'); ?>">
+                                            <?php echo render_input('search', '', '', 'search', ['data-name' => 'search', 'onkeyup' => 'leads_kanban();', 'placeholder' => _l('leads_search')], [], 'no-margin') ?>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div id="vueApp" class="tw-inline pull-right">
+
+                                        </div>
+                                    <?php } ?>
+                                    <?php echo form_hidden('sort_type'); ?>
+                                    <?php echo form_hidden('sort', (get_option('default_leads_kanban_sort') != '' ? get_option('default_leads_kanban_sort_type') : '')); ?>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="hidden-columns-table-client-leads" type="text/json">
+    <?php echo get_staff_meta(get_staff_user_id(), 'hidden-columns-table-client-leads'); ?>
+</script>
+<?php include_once(APPPATH . 'views/admin/leads/status.php'); ?>
+<?php init_tail(); ?>
+
+<script>
+    $(function() {
+
+        // Init the table
+        table_leads = $(".table-client-leads");
+        if (table_leads.length) {
+            var tableLeadsConsentHeading = table_leads.find("#th-consent");
+            var leadsTableNotSortable = [0];
+            var leadsTableNotSearchable = [0, table_leads.find("#th-assigned").index()];
+
+            if (tableLeadsConsentHeading.length > 0) {
+                leadsTableNotSortable.push(tableLeadsConsentHeading.index());
+                leadsTableNotSearchable.push(tableLeadsConsentHeading.index());
+            }
+
+            _table_api = initDataTable(
+                table_leads,
+                admin_url + "client_lead/leads/table",
+                leadsTableNotSearchable,
+                leadsTableNotSortable,
+                [],
+                [table_leads.find("th.date-created").index(), "desc"]
+            );
+
+            if (_table_api && tableLeadsConsentHeading.length > 0) {
+                _table_api.on("draw", function() {
+                    var tableData = table_leads.find("tbody tr");
+                    $.each(tableData, function() {
+                        $(this).find("td:eq(3)").addClass("bg-neutral");
+                    });
+                });
+            }
+
+            $.each(LeadsServerParams, function(i, obj) {
+                $("select" + obj).on("change", function() {
+                    $("[name='view_status[]']")
+                        .prop("disabled", $(this).val() == "lost" || $(this).val() == "junk")
+                        .selectpicker("refresh");
+
+                    table_leads.DataTable().ajax.reload();
+                });
+            });
+        }
+    });
+    var openLeadID = '<?php echo $leadid; ?>';
+    $(function() {
+        // function leads_kanban(search) {
+        // init_kanban(
+        //     "client_lead/leads/kanban",
+        //     leads_kanban_update,
+        //     ".leads-status",
+        //     290,
+        //     360,
+        //     init_leads_status_sortable
+        // );
+        // }
+        leads_kanban();
+        $('#leads_bulk_mark_lost').on('change', function() {
+            $('#move_to_status_leads_bulk').prop('disabled', $(this).prop('checked') == true);
+            $('#move_to_status_leads_bulk').selectpicker('refresh')
+        });
+        $('#move_to_status_leads_bulk').on('change', function() {
+            if ($(this).selectpicker('val') != '') {
+                $('#leads_bulk_mark_lost').prop('disabled', true);
+                $('#leads_bulk_mark_lost').prop('checked', false);
+            } else {
+                $('#leads_bulk_mark_lost').prop('disabled', false);
+            }
+        });
+    });
+
+    function init_lead(id, isEdit) {
+        if ($("#task-modal").is(":visible")) {
+
+            $("#task-modal").modal("hide");
+        }
+        // In case header error
+        if (init_lead_modal_data(id, undefined, isEdit)) {
+            $("#lead-modal").modal("show");
+        }
+    }
+
+    // Fetches lead modal data, can be edit/add/view
+    function init_lead_modal_data(id, url, isEdit) {
+
+        var requestURL =
+            (typeof url != "undefined" ? url : "client_lead/leads/lead/") +
+            (typeof id != "undefined" ? id : "");
+
+        if (isEdit === true) {
+            var concat = "?";
+            if (requestURL.indexOf("?") > -1) {
+                concat += "&";
+            }
+            requestURL += concat + "edit=true";
+        }
+
+        requestGetJSON(requestURL)
+            .done(function(response) {
+                _lead_init_data(response, id);
+            })
+            .fail(function(data) {
+                alert_float("danger", data.responseText);
+            });
+    }
+    // Add lead data returned from server to the lead modal
+    function _lead_init_data(data, id) {
+        var hash = window.location.hash;
+
+        var $leadModal = $("#lead-modal");
+        $("#lead_reminder_modal").html(data.leadView.reminder_data);
+
+
+        $leadModal.find(".data").html(data.leadView.data);
+
+        $leadModal.modal({
+            show: true,
+            backdrop: "static",
+        });
+
+        init_tags_inputs();
+        init_selectpicker();
+        init_form_reminder();
+        init_datepicker();
+        init_color_pickers();
+        custom_fields_hyperlink();
+        validate_lead_form();
+
+        var hashes = [
+            "#tab_lead_profile",
+            "#attachments",
+            "#lead_notes",
+            "#lead_activity",
+            "#gdpr",
+        ];
+
+        if (hashes.indexOf(hash) > -1) {
+            window.location.hash = hash;
+        }
+
+        initDataTableInline($("#consentHistoryTable"));
+
+        $("#lead-modal")
+            .find(".gpicker")
+            .googleDrivePicker({
+                onPick: function(pickData) {
+                    leadExternalFileUpload(pickData, "gdrive", id);
+                },
+            });
+
+        if (id !== "" && typeof id != "undefined") {
+            if (typeof Dropbox != "undefined") {
+                document.getElementById("dropbox-chooser-lead").appendChild(
+                    Dropbox.createChooseButton({
+                        success: function(files) {
+                            leadExternalFileUpload(files, "dropbox", id);
+                        },
+                        linkType: "preview",
+                        extensions: app.options.allowed_files.split(","),
+                    })
+                );
+            }
+
+            if (typeof leadAttachmentsDropzone != "undefined") {
+                leadAttachmentsDropzone.destroy();
+            }
+
+            leadAttachmentsDropzone = new Dropzone(
+                "#lead-attachment-upload",
+                appCreateDropzoneOptions({
+                    sending: function(file, xhr, formData) {
+                        formData.append("id", id);
+                        if (this.getQueuedFiles().length === 0) {
+                            formData.append("last_file", true);
+                        }
+                    },
+                    success: function(file, response) {
+                        response = JSON.parse(response);
+                        if (
+                            this.getUploadingFiles().length === 0 &&
+                            this.getQueuedFiles().length === 0
+                        ) {
+                            _lead_init_data(response, response.id);
+                        }
+                    },
+                })
+            );
+
+            $leadModal
+                .find('.nav-tabs a[href="' + window.location.hash + '"]')
+                .tab("show");
+            var latest_lead_activity = $leadModal
+                .find("#lead_activity .feed-item:last-child .text")
+                .html();
+            if (typeof latest_lead_activity != "undefined") {
+                $leadModal.find("#lead-latest-activity").html(latest_lead_activity);
+            } else {
+                $leadModal
+                    .find(".lead-latest-activity > .lead-info-heading")
+                    .addClass("hide");
+
+                if ($("[lead-is-junk-or-lost]").length > 0) {
+                    $(".form-group-select-input-status").find(".req").remove();
+                }
+            }
+        }
+    }
+</script>
+</body>
+
+</html>

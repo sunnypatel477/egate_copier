@@ -1,0 +1,40 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+$aColumns = [
+    'id',
+    'name',
+    
+];
+
+$sIndexColumn = 'id';
+$sTable = db_prefix() . 'instax_printing_event_category';
+$CI = &get_instance();
+$where = [];
+$join = array();
+
+$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array());
+$output = $result['output'];
+$rResult = $result['rResult'];
+
+foreach ($rResult as $aRow) {
+
+    $row = [];
+
+    $row[] = $aRow['id'];
+    $row[] = $aRow['name'];
+   
+    $options = "";
+    
+
+    if ( is_admin()) {
+        $options .= icon_btn(admin_url('instax_printing/delete_event_category/' . $aRow['id']), 'fa-regular fa-trash-can', 'btn-danger _delete');
+        $options .= icon_btn(admin_url('instax_printing/create_event_category/' . $aRow['id']), 'fa-regular fa-edit', 'btn-info');
+    }
+
+
+    $row[] = $options;
+
+    $row['DT_RowClass'] = 'has-row-options';
+    $output['aaData'][] = $row;
+}

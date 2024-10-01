@@ -1,0 +1,34 @@
+summary:
+
+when uploading to git, only code will get uploaded
+
+
+when we download code from github, it will automatically download the packages
+but we need to do this additioanl steps:
+
+this is from original code (not from git)
+inside packges folder: there might be _custom folder and TrialMaker library
+
+(after downlaoding from git)
+so need to replace this manually to github downloaded.
+
+
+
+do you understand?yes
+80%
+
+
+i can revise again
+
+
+
+step 1: goto github repo
+step 2: goto release section
+step 3: download reuiqred files (eg: data, custompackage) and even source code zip
+step 4: unzip source file and open with vs
+step 5: just open with visual studio and wait for the packages folder to create automatically (maybe check after 2mins)
+step 6: after packages folder is visible unzip the custompackage.zip inside packges folder
+spte 7: you should see _custom and TrialMaker.Library folder
+step 8: open .sln file with vs and build and run
+
+i think this is it ok wait

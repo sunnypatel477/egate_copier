@@ -1,0 +1,339 @@
+.dropzone, .dropzone * {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.dropzone-previews {
+    box-sizing: border-box;
+}
+
+#images_old_preview {
+    box-sizing: border-box;
+}
+
+.dz-details {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    font-size: 13px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 2em 1em;
+    text-align: center;
+    color: rgba(0,0,0,.9);
+    line-height: 150%;
+}
+
+.dz-progress {
+    opacity: 1;
+    z-index: 1000;
+    pointer-events: none;
+    position: absolute;
+    height: 16px;
+    left: 50%;
+    top: 50%;
+    margin-top: -8px;
+    width: 80px;
+    margin-left: -40px;
+    background: rgba(255,255,255,.9);
+    -webkit-transform: scale(1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dz-upload {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: green;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transition: width .3s ease-in-out;
+}
+
+.dz-error-message {
+    pointer-events: none;
+    z-index: 1000;
+    position: absolute;
+    display: block;
+    display: none;
+    opacity: 0;
+    -webkit-transition: opacity .3s ease;
+    -moz-transition: opacity .3s ease;
+    -ms-transition: opacity .3s ease;
+    -o-transition: opacity .3s ease;
+    transition: opacity .3s ease;
+    border-radius: 8px;
+    font-size: 13px;
+    top: 130px;
+    left: -10px;
+    width: 140px;
+    background: #be2626;
+    background: linear-gradient(to bottom,#be2626,#a92222);
+    padding: .5em 1.2em;
+    color: #fff;
+}
+
+.dz-success-mark {
+    position: absolute;
+    display: none;
+    top: 30px;
+    width: 54px;
+    height: 58px;
+    left: 50%;
+    margin-left: -27px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 500;
+    margin-top: -27px;
+}
+
+.dz-error-mark {
+    position: absolute;
+    display: none;
+    top: 30px;
+    width: 54px;
+    height: 58px;
+    left: 50%;
+    margin-left: -27px;
+    pointer-events: none;
+    opacity: 0;
+    margin-top: -27px;
+    z-index: 500;
+}
+
+.dz-remove {
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+}
+
+.dz-preview {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    margin: 0.5em;
+    vertical-align: top;
+    min-height: 100px;
+}
+
+img.image-w-h {
+    width: 120px;
+    height: 120px;
+}
+
+.remove_file {
+    position: absolute;
+    top: -12px;
+    right: -10px;
+    border: 1px solid red;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+img.images_w_table {
+    width: 116px;
+    height: 73px;
+}
+
+.dz-preview .dz-details .dz-filename {
+    white-space: nowrap;
+}
+
+.dz-preview .dz-details, .dz-preview .dz-details:hover {
+    background: #03a9f4;
+    color: #fff;
+    height: 120px;
+}
+.dz-preview.dz-file-preview .dz-details {
+    opacity: 1;
+}
+.dz-preview .dz-image {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
+.dz-preview .dz-details .dz-filename {
+    white-space: nowrap;
+}
+
+.cs-portal-a-cancelled{
+    border: 4px solid red;
+    font-weight: 700;
+    background: #d71a1a;
+}
+.cs-portal-h-cancelled{
+    color: #f9fafb;
+}
+.cs-portal-span-cancelled{
+    color:#f9fafb; font-size: 17px;
+}
+
+.cs-portal-a-renewal{
+    border: 4px solid #2196f3; font-weight: 700; background: #2196f3;
+}
+
+.cs-portal-a-expired{
+    border: 4px solid #ffa500; font-weight: 700; background: #ffa500;
+}
+
+.cs-portal-a-pause{
+    border: 4px solid #3db8da; font-weight: 700; background: #3db8da;
+}
+
+.cs-portal-a-activate{
+    border: 4px solid #4caf50; font-weight: 700; background: #4caf50;
+}
+
+.cs-portal-a-complete{
+    border: 4px solid #84c529; font-weight: 700; background: #84c529;
+}
+
+div.rating label {
+  font-size: 4vw;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  color: grey;
+}
+
+div.rating label input[type=radio]:checked ~ img.emot-fill {
+  display: inline;
+}
+
+div.rating label input[type=radio]:checked ~ img.emot-line {
+  display: none;
+}
+
+div.rating label input[type=radio] {
+  display: none;
+}
+
+div.rating label:hover img.emot-fill {
+  display: initial;
+  -webkit-animation: wiggle 2s linear infinite;
+          animation: wiggle 2s linear infinite;
+}
+
+div.rating label:hover img.emot-line {
+  display: none;
+}
+
+div.rating img.emot-fill {
+  display: none;
+}
+
+@-webkit-keyframes wiggle {
+  0%, 7% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+  15% {
+    -webkit-transform: rotateZ(-15deg);
+            transform: rotateZ(-15deg);
+  }
+  20% {
+    -webkit-transform: rotateZ(10deg);
+            transform: rotateZ(10deg);
+  }
+  25% {
+    -webkit-transform: rotateZ(-10deg);
+            transform: rotateZ(-10deg);
+  }
+  30% {
+    -webkit-transform: rotateZ(6deg);
+            transform: rotateZ(6deg);
+  }
+  35% {
+    -webkit-transform: rotateZ(-4deg);
+            transform: rotateZ(-4deg);
+  }
+  40%, 100% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+}
+
+@keyframes wiggle {
+  0%, 7% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+  15% {
+    -webkit-transform: rotateZ(-15deg);
+            transform: rotateZ(-15deg);
+  }
+  20% {
+    -webkit-transform: rotateZ(10deg);
+            transform: rotateZ(10deg);
+  }
+  25% {
+    -webkit-transform: rotateZ(-10deg);
+            transform: rotateZ(-10deg);
+  }
+  30% {
+    -webkit-transform: rotateZ(6deg);
+            transform: rotateZ(6deg);
+  }
+  35% {
+    -webkit-transform: rotateZ(-4deg);
+            transform: rotateZ(-4deg);
+  }
+  40%, 100% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+}
+img.emot-line {
+    width: 65px;
+}
+/*# sourceMappingURL=style.css.map */
+
+.dropup .dropdown-menu {
+    bottom: unset !important;
+}
+
+.list-status h3 {
+    margin-top: 0px;
+}
+
+.list-status:last-child {
+    border-right: 0px;
+}
+
+.list-status a {
+    border: 1px solid #eeeeee;
+    padding: 15px;
+    display: inline-block;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.list-status a.active {
+    background: #f9fafb;
+}
+
+.cs-portal-a-total-hours {
+    font-weight: 700;
+    background: #673ab7;
+}
+
+.cs-portal-a-avg-resolution-time {
+    font-weight: 700;
+    background: #3f51b5;
+}
+.cs-portal-a-customer-satisfaction-score {
+    font-weight: 700;
+    background: #3f51b5;
+}

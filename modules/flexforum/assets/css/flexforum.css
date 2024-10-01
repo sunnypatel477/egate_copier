@@ -1,0 +1,44 @@
+.flexforum-search-jumbotron {
+    margin-top: -20px;
+    margin-bottom: 10px;
+    background: rgba(158, 158, 158,0.5) url(../images/bg.svg) repeat scroll 0 0;
+}
+
+.flexforum-search .form-control-feedback {
+    left: 6px !important;
+    top: 17px;
+    font-size: 16px
+}
+
+.flexforum-search input[type=search] {
+    padding-left: 40px;
+    height: 50px;
+    font-size: 17px
+}
+
+.flexforum-search input[type=search]:focus {
+    padding-left: 15px
+}
+
+.flexforum-search button[type=submit] {
+    height: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0
+}
+
+.loader {
+    display: inline-block;
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
