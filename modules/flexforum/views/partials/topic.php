@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 use Carbon\Carbon;
 ?>
 <div class="row">
@@ -92,12 +93,12 @@ use Carbon\Carbon;
 
                 <?php $like_type = FLEXFORUM_REPLY_LIKE_TYPE ?>
                 <?php $follower_type = FLEXFORUM_REPLY_FOLLOWER_TYPE ?>
-                <?php foreach ($replies as $reply) { 
-                    ?>
-                    <?php $this->load->view('partials/reply-content', ['reply' => $reply, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true,'is_secondary_reply'=>false, 'closed' => $topic['closed']]) ?>
-                    <?php 
-                        if(isset($reply['repaly'])){ ?>
-                        <?php foreach ($reply['repaly'] as $r) { 
+                <?php foreach ($replies as $reply) {
+                ?>
+                    <?php $this->load->view('partials/reply-content', ['reply' => $reply, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true, 'is_secondary_reply' => false, 'closed' => $topic['closed']]) ?>
+                    <?php
+                    if (isset($reply['repaly'])) { ?>
+                        <?php foreach ($reply['repaly'] as $r) {
 
                             $r['poster_name'] = flexforum_get_user_name($r['user_id'], $r['user_type']);
                             $r['poster_image'] = flexforum_get_poster_image($r['user_id'], $r['user_type']);
@@ -105,11 +106,11 @@ use Carbon\Carbon;
                             $r['reply_liked'] = flexforum_get_reply_liked($r['id']);
                             $r['reply_followed'] = flexforum_get_reply_followed($r['id']);
                             $r['is_reply_owner'] = (flexforum_get_user_id() === $r['user_id'] && flexforum_get_user_type() == $r['user_type']);
-                    ?>
-                        <?php $this->load->view('partials/reply-content-sub', ['reply' => $r, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true,'is_secondary_reply'=>true, 'closed' => $topic['closed']]) ?>
+                        ?>
+                            <?php $this->load->view('partials/reply-content-sub', ['reply' => $r, 'like_type' => $like_type, 'follower_type' => $follower_type, 'has_reply_form' => true, 'is_secondary_reply' => true, 'closed' => $topic['closed']]) ?>
 
                         <?php } ?>
-                        <?php }
+                    <?php }
                     ?>
                 <?php } ?>
             </div>
@@ -307,6 +308,10 @@ use Carbon\Carbon;
                     let topicRepliesCount = Number(topicReplies.text());
                     topicReplies.text(++topicRepliesCount);
                     hide_flexforum_reply();
+                    const currentUrl = window.location.href;
+                    window.location.href = currentUrl;
+                    window.location.reload(true);
+
                 } else {
                     alert_float('danger', data.message);
                 }
@@ -398,6 +403,9 @@ use Carbon\Carbon;
                     let replyRepliesCount = Number(replyReplies.text());
                     replyReplies.text(++replyRepliesCount);
                     hide_secondary_flexforum_reply(form_id);
+                    const currentUrl = window.location.href;
+                    window.location.href = currentUrl;
+                    window.location.reload(true);
                 } else {
                     alert_float('danger', data.message)
                 }
@@ -413,9 +421,9 @@ use Carbon\Carbon;
         $(this).children().toggleClass('fa-angle-up');
         let type_id = $(this).data('id');
         let closed = $(this).data('closed');
-        
+
         let secondary_reples = $(`.replies-reply-${type_id}`);
-        
+
         if ($(`.replies-reply-${type_id}`).hasClass('hide')) {
             $(`.replies-reply-${type_id}`).removeClass('hide');
         } else {
@@ -507,10 +515,10 @@ use Carbon\Carbon;
 
                 // $('#flexforum_topic_modal textarea[name="description"]').val(data.data.description);
                 if (tinymce && tinymce.activeEditor) {
-                    
+
                     tinyMCE.activeEditor.setContent(replyData.reply);
-                } 
-                
+                }
+
                 // let plainTextReply = $('<div>').html(replyData.reply).text();
 
                 // $(`#${form_id} textarea[name="reply"]`).val(plainTextReply);

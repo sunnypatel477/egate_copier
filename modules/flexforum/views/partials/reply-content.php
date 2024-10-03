@@ -19,7 +19,9 @@
             </div>
             <div class="col-md-12 tw-mt-5">
                 <p>
-                    <?php echo $reply['reply'] ?>
+
+                    <?php
+                    echo htmlspecialchars_decode($reply['reply']) ?>
                 </p>
             </div>
             <div class="col-md-12 tw-mt-5">
@@ -81,7 +83,7 @@
                     <?php } ?>
                 </span>
             </div>
-            <?php if (isset($has_reply_form) && $has_reply_form) { ?>
+            <?php if (isset($has_reply_form) && $has_reply_form) {  ?>
                 <div class="row">
                     <div class="col-xs-11 col-xs-offset-1">
                         <?php $this->load->view('partials/reply-form', ['form_id' => "flexforum_secondary_reply_form-$reply[id]", 'reply_type' => FLEXFORUM_REPLY_REPLY_TYPE, 'type_id' => $reply['id']]); ?>
@@ -89,10 +91,10 @@
                 </div>
             <?php } ?>
             <div class="row">
-                    <div class="col-xs-11 col-xs-offset-1">
-                        <?php $this->load->view('partials/reply-edit-form', ['form_id' => "flexforum_edit_secondary_reply_form-$reply[id]", 'reply_type' => FLEXFORUM_REPLY_REPLY_TYPE,'reply' => $reply, 'type_id' => $reply['id']]); ?>
-                    </div>
+                <div class="col-xs-11 col-xs-offset-1">
+                    <?php $this->load->view('partials/reply-edit-form', ['form_id' => "flexforum_edit_secondary_reply_form-$reply[id]", 'reply_type' => FLEXFORUM_REPLY_REPLY_TYPE, 'reply' => $reply, 'type_id' => $reply['id']]); ?>
                 </div>
+            </div>
         </div>
     </div>
 </div>

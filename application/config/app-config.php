@@ -53,7 +53,7 @@ define('APP_DB_PASSWORD', '');
 /**
  * The name of the database you want to connect to
  */
-define('APP_DB_NAME', 'print_egate_copier_erp');
+define('APP_DB_NAME', 'support_egateinc');
 
 /**
  * @since  2.3.0
